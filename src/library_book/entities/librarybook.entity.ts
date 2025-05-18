@@ -1,14 +1,14 @@
 
 import { LibraryEntity } from "src/book/entities/library.entity";
-import { BookEntity } from "src/library/library/entities/book.entity";
+import { BookEntity } from "src/library/entities/book.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 // class: LibraryBookEntity
 @Entity('library_books')
 @Unique(['library', 'book'])
 export class LibraryBookEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   // Relación muchos-a-uno: muchas entradas de asociación pueden tener la misma biblioteca
   @ManyToOne(() => LibraryEntity, (library) => library.libraryBooks, { onDelete: 'CASCADE' })
