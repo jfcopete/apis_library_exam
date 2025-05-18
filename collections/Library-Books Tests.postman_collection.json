@@ -1,0 +1,305 @@
+{
+	"info": {
+		"_postman_id": "178a8bc7-4f89-4cdd-ad54-16a936a59e4c",
+		"name": "Library-Books Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4221617"
+	},
+	"item": [
+		{
+			"name": "Link valid book to library",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 201\", () => pm.response.to.have.status(201));",
+						"const json = pm.response.json();",
+						"pm.test(\"Returned book id matches\", () => pm.expect(json.id).to.eql(pm.environment.get('bookId')));"
+					]
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"libraryId\": \"{{libraryId}}\",\n  \"bookId\": \"{{bookId}}\",\n  \"copies\": 2\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/libraries/{{libraryId}}/books",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{libraryId}}",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Link non-existent book to library",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));"
+					]
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"libraryId\": \"{{libraryId}}\",\n  \"bookId\": \"{{invalidBookId}}\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/libraries/{{libraryId}}/books",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{libraryId}}",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all books in library",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+						"pm.test(\"Response is array\", () => pm.expect(pm.response.json()).to.be.an('array'));"
+					]
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/libraries/{{libraryId}}/books",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{libraryId}}",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get specific book in library",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+						"pm.test(\"Book id matches\", () => pm.expect(pm.response.json().id).to.eql(pm.environment.get('bookId')));"
+					]
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/libraries/{{libraryId}}/books/{{bookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{libraryId}}",
+						"books",
+						"{{bookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get book not in library",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));"
+					]
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/libraries/{{libraryId}}/books/{{invalidBookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{libraryId}}",
+						"books",
+						"{{invalidBookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Replace books in library (valid)",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+						"pm.test(\"Response array contains bookId\", () => pm.expect(pm.response.json()[0].id).to.eql(pm.environment.get('bookId')));"
+					]
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"bookIds\": [\"{{bookId}}\"]\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/libraries/{{libraryId}}/books",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{libraryId}}",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Replace books in library (invalid book)",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));"
+					]
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"bookIds\": [\"{{invalidBookId}}\"]\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/libraries/{{libraryId}}/books",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{libraryId}}",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Unlink book from library (valid)",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 204\", () => pm.response.to.have.status(204));"
+					]
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/libraries/{{libraryId}}/books/{{bookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{libraryId}}",
+						"books",
+						"{{bookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Unlink book not in library",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));"
+					]
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/libraries/{{libraryId}}/books/{{invalidBookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{libraryId}}",
+						"books",
+						"{{invalidBookId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
