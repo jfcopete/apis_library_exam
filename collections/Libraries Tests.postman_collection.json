@@ -1,0 +1,315 @@
+{
+	"info": {
+		"_postman_id": "27a2d6d6-2381-4ce5-b2b2-f631b8592135",
+		"name": "Libraries Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4221617"
+	},
+	"item": [
+		{
+			"name": "Create valid library",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => pm.response.to.have.status(201));",
+							"const json = pm.response.json();",
+							"pm.test(\"Has id field\", () => pm.expect(json).to.have.property('id'));",
+							"pm.environment.set(\"libraryId\", json.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Biblioteca Central\",\n  \"adress\": \"Av. Siempre Viva 123\",\n  \"city\": \"Springfield\",\n  \"work_hours\": \"08:00-18:00\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/libraries",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create invalid library",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));"
+					]
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"\",\n  \"adress\": \"\",\n  \"city\": \"\",\n  \"work_hours\": \"invalid\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/libraries",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all libraries",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+						"pm.test(\"Response is array\", () => pm.expect(pm.response.json()).to.be.an('array'));"
+					]
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/libraries",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get library by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+						"pm.test(\"Response has correct id\", () => pm.expect(pm.response.json().id).to.eql(pm.environment.get('libraryId')));"
+					]
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/libraries/{{libraryId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{libraryId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get library by invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));"
+					]
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/libraries/{{invalidLibraryId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{invalidLibraryId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update valid library",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+						"pm.test(\"Name updated\", () => pm.expect(pm.response.json().name).to.eql('Biblioteca Actualizada'));"
+					]
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Biblioteca Actualizada\",\n  \"work_hours\": \"09:00-20:00\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/libraries/{{libraryId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{libraryId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update library invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));"
+					]
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"name\": \"No Existe\" }"
+				},
+				"url": {
+					"raw": "{{base_url}}/libraries/{{invalidLibraryId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{invalidLibraryId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete valid library",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 204\", () => pm.response.to.have.status(204));"
+					]
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/libraries/{{libraryId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{libraryId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete library invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));"
+					]
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/libraries/{{invalidLibraryId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"libraries",
+						"{{invalidLibraryId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "localhost:3000",
+			"type": "string"
+		}
+	]
+}

@@ -4,8 +4,8 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 // class: BookEntity
 @Entity('books')
 export class BookEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ length: 150 })
   title: string;
@@ -13,8 +13,12 @@ export class BookEntity {
   @Column({ length: 100 })
   author: string;
 
-  @Column({ type: 'int', nullable: true })
-  year?: number;
+  @Column({ nullable: true, length: 200 })
+  publishedDate?: string;
+
+  @Column({ nullable: true, length: 200 })
+  isbn?: string;
+
 
   // Relación OneToMany hacia la entidad intermedia LibraryBook (un libro puede tener muchas asociaciones con bibliotecas)
   @OneToMany(() => LibraryBookEntity, (libraryBook) => libraryBook.book)

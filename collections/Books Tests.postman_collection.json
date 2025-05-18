@@ -1,0 +1,316 @@
+{
+	"info": {
+		"_postman_id": "b4b58225-5d1b-47aa-9427-6d4936c8fce7",
+		"name": "Books Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4221617"
+	},
+	"item": [
+		{
+			"name": "Create valid book",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 201\", () => pm.response.to.have.status(201));",
+						"const json = pm.response.json();",
+						"pm.test(\"Has id field\", () => pm.expect(json).to.have.property('id'));",
+						"pm.environment.set(\"bookId\", json.id);"
+					]
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Clean Code\",\n  \"author\": \"Robert C. Martin\",\n  \"publishedDate\": \"2008-08-01T00:00:00.000Z\",\n  \"isbn\": \"9780132350884\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/books",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create invalid book",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 400\", () => pm.response.to.have.status(400));"
+					]
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"\",\n  \"author\": \"\",\n  \"publishedDate\": \"3000-01-01T00:00:00.000Z\",\n  \"isbn\": \"123\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/books",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all books",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));"
+					]
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get book by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+						"pm.test(\"Correct id\", () => pm.expect(pm.response.json().id).to.eql(pm.environment.get('bookId')));"
+					]
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books/{{bookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"{{bookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get book by invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));"
+					]
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books/{{invalidBookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"{{invalidBookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update valid book",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+						"pm.test(\"Title updated\", () => pm.expect(pm.response.json().title).to.eql('Clean Coder'));"
+					]
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Clean Coder\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/books/{{bookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"{{bookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update book invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));"
+					]
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"title\": \"No Existe\" }"
+				},
+				"url": {
+					"raw": "{{base_url}}/books/{{invalidBookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"{{invalidBookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete valid book",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 204\", () => pm.response.to.have.status(204));"
+					]
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books/{{bookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"{{bookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete book invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": [
+						"pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));"
+					]
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/books/{{invalidBookId}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"books",
+						"{{invalidBookId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "default"
+		}
+	]
+}
