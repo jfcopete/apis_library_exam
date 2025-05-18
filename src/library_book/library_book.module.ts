@@ -3,8 +3,8 @@ import { LibraryBookController } from './library_book.controller';
 import { LibraryBookService } from './library_book.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LibraryBookEntity } from './entities/librarybook.entity';
-import { BookEntity } from 'src/library/entities/book.entity';
-import { LibraryEntity } from 'src/book/entities/library.entity';
+import { BookEntity } from 'src/book/entities/book.entity';
+import { LibraryEntity } from 'src/library/entities/library.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([LibraryBookEntity,

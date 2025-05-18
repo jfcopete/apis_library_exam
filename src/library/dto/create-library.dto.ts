@@ -1,32 +1,43 @@
 // src/libraries/dto/create-library.dto.ts
 
 import { IsString, IsNotEmpty, Matches } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 /**
  * DTO para crear una Biblioteca
  */
 export class CreateLibraryDto {
+  @ApiProperty({
+    example: 'Biblioteca Central',
+    description: 'Nombre de la biblioteca',
+  })
   @IsString()
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty({
+    example: 'Calle Falsa 123',
+    description: 'Dirección de la biblioteca',
+  })
   @IsString()
   @IsNotEmpty()
-  address: string;
+  adress: string;
 
+  @ApiProperty({
+    example: 'Springfield',
+    description: 'Ciudad donde está ubicada la biblioteca',
+  })
   @IsString()
   @IsNotEmpty()
   city: string;
 
-  @IsString()
-  @Matches(/^(?:[01]\d|2[0-3]):[0-5]\d$/, {
-    message: 'openTime debe tener formato HH:mm',
+  @ApiProperty({
+    example: '08:00-18:00',
+    description: 'Horario de atención en formato "HH:mm-HH:mm"',
   })
-  openTime: string;
-
   @IsString()
-  @Matches(/^(?:[01]\d|2[0-3]):[0-5]\d$/, {
-    message: 'closeTime debe tener formato HH:mm',
+  @Matches(/^(?:[01]\d|2[0-3]):[0-5]\d-(?:[01]\d|2[0-3]):[0-5]\d$/, {
+    message: 'work_hours debe tener formato HH:mm-HH:mm',
   })
-  closeTime: string;
+  work_hours: string;
 }

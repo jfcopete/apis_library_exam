@@ -1,6 +1,6 @@
 
-import { LibraryEntity } from "src/book/entities/library.entity";
-import { BookEntity } from "src/library/entities/book.entity";
+import { BookEntity } from "src/book/entities/book.entity";
+import { LibraryEntity } from "src/library/entities/library.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 // class: LibraryBookEntity
